@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乛^𝐈'𝐌ꜛ𝐀𝐖𝐀𝐈𝐒ꜛ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for fonts and animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-900 text-gray-200; /* Dark theme by default */
+            overflow-x: hidden;
+        }
+
+        .font-teko {
+            font-family: 'Teko', sans-serif;
+        }
+
+        /* Gate Animation */
+        #gate-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 9999; display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .gate {
+            position: absolute; top: 0; width: 50vw; height: 100vh;
+            background-color: #111827;
+            transition: transform 1s cubic-bezier(0.86, 0, 0.07, 1);
+            display: flex; align-items: center; justify-content: center;
+        }
+        #left-gate { left: 0; border-right: 2px solid #374151; }
+        #right-gate { right: 0; border-left: 2px solid #374151; }
+        #gate-container.open #left-gate { transform: translateX(-100%); }
+        #gate-container.open #right-gate { transform: translateX(100%); }
+        #gate-container.open #unlock-button-container { opacity: 0; }
+        #unlock-button-container { z-index: 10000; text-align: center; color: white; transition: opacity 0.5s ease; }
+
+        /* Page content fade-in */
+        #main-content { opacity: 0; transition: opacity 1s ease-in-out 0.5s; }
+        #main-content.visible { opacity: 1; }
+        
+        /* Back to top button */
+        #to-top-btn { position: fixed; bottom: -100px; right: 20px; transition: bottom 0.5s; z-index: 100; }
+        #to-top-btn.active { bottom: 20px; }
+
+        /* Section visibility for SPA navigation */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        /* Animated text gradient */
+        .animated-gradient-text {
+            background: linear-gradient(90deg, #f59e0b, #fb923c, #f472b6, #a78bfa);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-animation 5s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Lock screen animation */
+        .animate-bounce-subtle {
+            animation: bounce-subtle 2.5s ease-in-out infinite;
+        }
+        @keyframes bounce-subtle {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* New Card Animations */
+        @keyframes float-animation {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes wobble-animation {
+            0%, 100% { transform: rotate(0deg) translateY(-12px); } /* Keep it lifted */
+            25% { transform: rotate(2deg) translateY(-12px); }
+            75% { transform: rotate(-2deg) translateY(-12px); }
+        }
+
+        .channel-card {
+            animation: float-animation 4s ease-in-out infinite;
+        }
+
+        .channel-card:hover {
+            animation: wobble-animation 0.8s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Gate Opening Animation -->
+    <div id="gate-container">
+        <div id="unlock-button-container" class="cursor-pointer animate-bounce-subtle">
+            <div class="p-8 border-4 border-amber-400 rounded-full">
+                <i class="fa-solid fa-lock text-6xl text-amber-400"></i>
+            </div>
+            <h2 class="font-teko text-5xl mt-6 tracking-widest">UNLOCK CHANNELS</h2>
+            <p class="text-gray-400">Click the lock to enter</p>
+        </div>
+        <div id="left-gate" class="gate"></div>
+        <div id="right-gate" class="gate"></div>
+    </div>
+
+    <!-- Welcome Popup -->
+    <div id="welcome-popup" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-2xl text-center border-t-4 border-amber-400">
+            <h2 class="text-2xl font-bold mb-2 text-white">Welcome!</h2>
+            <p class="text-gray-300">Developed for <strong>IM Awais</strong></p>
+            <p class="text-sm text-gray-400 mt-2">with <i class="fa-solid fa-heart text-red-500"></i> by Mustafa Talks</p>
+        </div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content">
+        <!-- Header -->
+        <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-40 shadow-md">
+            <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-white font-teko tracking-wider nav-link" data-target="home">
+                    乛^𝐈'𝐌ꜛ𝐀𝐖𝐀𝐈𝐒ꜛ
+                </a>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#" class="text-gray-300 hover:text-amber-400 transition nav-link" data-target="home">Home</a>
+                        <a href="#" class="text-gray-300 hover:text-amber-400 transition nav-link" data-target="about">About Developer</a>
+                        <a href="#" class="text-gray-300 hover:text-amber-400 transition nav-link" data-target="contact">Contact</a>
+                    </div>
+                    <button id="mobile-menu-button" class="md:hidden text-gray-300 hover:text-amber-400 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </nav>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-gray-900">
+                <a href="#" class="block py-2 px-6 text-sm text-gray-200 hover:bg-gray-800 nav-link" data-target="home">Home</a>
+                <a href="#" class="block py-2 px-6 text-sm text-gray-200 hover:bg-gray-800 nav-link" data-target="about">About Developer</a>
+                <a href="#" class="block py-2 px-6 text-sm text-gray-200 hover:bg-gray-800 nav-link" data-target="contact">Contact</a>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-6 py-12">
+            <!-- Home Page Section -->
+            <section id="home" class="page-section active">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-white font-teko tracking-wide animated-gradient-text">WELCOME ✦ꜛ𝗚𝗥𝗢𝗪𝗧𝗛 - 𝗫 FAMILY</h1>
+                    <p class="mt-4 text-lg text-gray-400">Your one-stop destination for exclusive content channels.</p>
+                </div>
+
+                <div class="text-center mb-12">
+                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-2 font-teko tracking-wider">🔥𝑨𝑳𝑳 𝑪𝑯𝑨𝑵𝑵𝑬𝑳 𝑳𝑰𝑵𝑲𝑺🖇👇</h2>
+                </div>
+
+                <!-- Channel Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 channel-card">
+                        <div class="p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="bg-blue-900 p-3 rounded-full"><i class="fa-solid fa-brain text-blue-500 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">✦ꜛ𝗚𝗥𝗢𝗪𝗧𝗛 - 𝗫 (𝐎𝐅𝐅𝐈𝐂�𝐋)🧠ꜛ🇵🇸ꜛ✦</h3>
+                                    <p class="text-sm text-gray-400">By: IM Awais</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 mb-6 text-sm">Official channel for growth mindset, strategies, and exclusive insights to level up your game.</p>
+                            <a href="https://www.whatsapp.com/channel/0029Vb3UXEHCsU9H5qUAOA1u" target="_blank" class="block w-full text-center bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition">Join Channel</a>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 channel-card">
+                        <div class="p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="bg-purple-900 p-3 rounded-full"><i class="fa-solid fa-graduation-cap text-purple-500 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">✦⚡𝐂𝐑𝐄𝐀𝐓𝐎𝐑𝐙 𝐀𝐂𝐀𝐃𝐄𝐌𝐘⚡ | тσρ 1%💎✦</h3>
+                                    <p class="text-sm text-gray-400">By: IM Awais</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 mb-6 text-sm">Join the top 1% of creators. Learn secrets, tips, and tricks from the best in the industry.</p>
+                            <a href="https://www.whatsapp.com/channel/0029VatjhAFDDmFYZFJOdL2G" target="_blank" class="block w-full text-center bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition">Join Channel</a>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 channel-card">
+                        <div class="p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="bg-teal-900 p-3 rounded-full"><i class="fa-solid fa-robot text-teal-500 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">✦乛ꜛ𝗔i 𝗛𝗬𝗣𝗘🧠ꜛ🤖✦</h3>
+                                    <p class="text-sm text-gray-400">By: IM Awais</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 mb-6 text-sm">All about Artificial Intelligence. Stay updated with the latest news, tools, and hype in the AI world.</p>
+                            <a href="https://www.whatsapp.com/channel/0029VbBOx4Q47Xe2VCcaFa0j" target="_blank" class="block w-full text-center bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition">Join Channel</a>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 channel-card">
+                        <div class="p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="bg-red-900 p-3 rounded-full"><i class="fa-solid fa-user-secret text-red-500 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">✦ 𝗧𝗥𝗬-𝗛𝗔𝗖𝗞-𝗠𝗘 ☠🏴‍☠</h3>
+                                    <p class="text-sm text-gray-400">By: IM Awais</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 mb-6 text-sm">Your hub for ethical hacking tutorials, cybersecurity news, and capture-the-flag challenges.</p>
+                            <a href="https://whatsapp.com/channel/0029VbAxWzNEgGfTOpZvzm2s" target="_blank" class="block w-full text-center bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition">Join Channel</a>
+                        </div>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 channel-card">
+                        <div class="p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="bg-gray-700 p-3 rounded-full"><i class="fa-solid fa-skull-crossbones text-gray-200 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">✦ꜛ DARK WEB HUB ꜛ💀</h3>
+                                    <p class="text-sm text-gray-400">By: IM Awais</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 mb-6 text-sm">Educational insights into the hidden parts of the internet. Explore responsibly.</p>
+                            <a href="https://whatsapp.com/channel/0029VbBJ4AJ7tkj8ROH4u70P" target="_blank" class="block w-full text-center bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition">Join Channel</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sponsorship Section -->
+                <div class="mt-24 text-center bg-gray-800 p-10 rounded-lg shadow-xl">
+                    <h2 class="text-3xl font-bold text-white mb-4">Sponsorship & Collaborations</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto mb-6">Interested in reaching a dedicated audience of creators, tech enthusiasts, and learners? Partner with us for a sponsorship opportunity.</p>
+                    <a href="https://tinyurl.com/mustafatalks" target="_blank" class="inline-block bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-lg transition">Get In Touch</a>
+                </div>
+            </section>
+
+            <!-- About Developer Page Section -->
+            <section id="about" class="page-section">
+                <div class="bg-gray-800 p-8 md:p-12 rounded-lg shadow-lg">
+                    <div class="text-center">
+                        <img src="https://placehold.co/150x150/fde047/111827?text=MT" alt="Mustafa Talks" class="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-amber-400">
+                        <h2 class="text-4xl font-bold text-white font-teko">Mustafa Talks</h2>
+                        <p class="text-amber-400">Web Developer & Creator</p>
+                    </div>
+                    <div class="mt-8 border-t border-gray-700 pt-8">
+                        <p class="text-lg text-gray-300 mb-4">
+                            Hello! I'm Mustafa, the developer behind this website. I specialize in creating modern, responsive, and user-friendly web experiences.
+                        </p>
+                        <p class="text-gray-400 mb-6">
+                            This platform was proudly developed for <strong>乛^𝐈'𝐌ꜛ𝐀𝐖𝐀𝐈𝐒ꜛ</strong> to provide a premium hub for his community and channels. My goal was to build a site that is not only visually stunning with features like the entry animation but also highly functional and easy to navigate on any device.
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
+                            <a href="https://tinyurl.com/mustafatalks" target="_blank" class="w-full sm:w-auto text-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>Contact on WhatsApp</span>
+                            </a>
+                            <a href="#" class="w-full sm:w-auto text-center bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-lg transition nav-link" data-target="contact">
+                                Send a Message
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Page Section -->
+            <section id="contact" class="page-section">
+                 <div class="max-w-2xl mx-auto bg-gray-800 p-8 md:p-12 rounded-lg shadow-lg">
+                    <h2 class="text-3xl font-bold text-center text-white mb-2">Get In Touch</h2>
+                    <p class="text-center text-gray-400 mb-8">Have a question or a project in mind? Send a message.</p>
+                    <form action="https://formspree.io/f/xyzjqppy" method="POST">
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-300 mb-2">Your Name</label>
+                            <input type="text" id="name" name="name" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-300 mb-2">Your Email</label>
+                            <input type="email" id="email" name="email" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-300 mb-2">Message</label>
+                            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition">Send Message</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800/50 border-t border-gray-700 mt-16">
+            <div class="container mx-auto px-6 py-6 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 乛^𝐈'𝐌ꜛ𝐀𝐖𝐀𝐈𝐒ꜛ. All Rights Reserved.</p>
+                <p class="mt-1">Developed with <i class="fa-solid fa-heart text-red-500"></i> by <a href="https://tinyurl.com/mustafatalks" target="_blank" class="font-bold text-amber-500 hover:underline">Mustafa Talks</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Back to Top Button -->
+    <a href="#" id="to-top-btn" class="bg-amber-500 hover:bg-amber-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gateContainer = document.getElementById('gate-container');
+            const unlockButton = document.getElementById('unlock-button-container');
+            const mainContent = document.getElementById('main-content');
+            const welcomePopup = document.getElementById('welcome-popup');
+            const toTopBtn = document.getElementById('to-top-btn');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageSections = document.querySelectorAll('.page-section');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // --- Gate & Welcome Logic ---
+            if (!sessionStorage.getItem('hasEntered')) {
+                unlockButton.addEventListener('click', () => {
+                    sessionStorage.setItem('hasEntered', 'true');
+                    openSite();
+                });
+            } else {
+                gateContainer.style.display = 'none';
+                mainContent.classList.add('visible');
+            }
+            
+            function openSite() {
+                gateContainer.classList.add('open');
+                mainContent.classList.add('visible');
+                
+                setTimeout(() => {
+                    welcomePopup.classList.remove('hidden');
+                    welcomePopup.classList.add('flex');
+                }, 1200);
+
+                setTimeout(() => {
+                    welcomePopup.classList.add('hidden');
+                    welcomePopup.classList.remove('flex');
+                }, 3200);
+
+                setTimeout(() => {
+                    gateContainer.style.display = 'none';
+                }, 2000);
+            }
+
+            // --- Back to Top Button ---
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    toTopBtn.classList.add('active');
+                } else {
+                    toTopBtn.classList.remove('active');
+                }
+            });
+
+            // --- Single Page Application Navigation ---
+            const showPage = (targetId) => {
+                pageSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+                window.scrollTo(0, 0);
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (link.getAttribute('data-target')) {
+                        const targetId = link.getAttribute('data-target');
+                        showPage(targetId);
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // --- Mobile Menu Toggle ---
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
+�
